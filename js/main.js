@@ -39,7 +39,7 @@ var createPhotosArray = function (countPhotos) {
   for (var i = 0; i < countPhotos; i += 1) {
     array.push(
         {
-          url: 'photos/' + getRandomNumber(1, 25) + '.jpg',
+          url: 'photos/' + (i + 1) + '.jpg',
           description: '',
           likes: getRandomNumber(15, 200),
           comments: createCommentsArray(getRandomNumber(1, 3))
@@ -50,6 +50,7 @@ var createPhotosArray = function (countPhotos) {
 };
 
 var photos = createPhotosArray(25);
+console.log(photos);
 
 var picturesContainer = document.querySelector('.pictures');
 
