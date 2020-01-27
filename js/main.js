@@ -50,7 +50,6 @@ var createPhotosArray = function (countPhotos) {
 };
 
 var photos = createPhotosArray(25);
-console.log(photos);
 
 var picturesContainer = document.querySelector('.pictures');
 
