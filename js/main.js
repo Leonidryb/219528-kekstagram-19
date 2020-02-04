@@ -159,3 +159,66 @@ hashtagsInputElement.addEventListener('focus', function () {
 hashtagsInputElement.addEventListener('blur', function () {
   document.addEventListener('keydown', onUploadPopupEscPress);
 });
+
+var deleteSimilarElements = function (array) {
+
+  for (var i = 0; i < array.length - 1; i += 1) {
+    array[i] = array[i].toLowerCase();
+  }
+
+  return array.filter(function (element, position, arr) {
+    return arr.indexOf(element) === position;
+  });
+};
+
+
+var checkValueInputHashTags = function (inputValue) {
+  var array = inputValue.split(' ');
+
+  for (var i = 0; i <= array.length - 1; i += 1) {
+    if (array[i][0] !== '#') {
+      return 'invalid first letter';
+    }
+    if (array[i].length > 19) {
+      return 'tag langth too long';
+    }
+    if (array[i].length === 1) {
+      return 'tag langth too small';
+    }
+  }
+
+  if (array.length !== deleteSimilarElements(array).length) {
+    return 'invalid similar tags';
+  }
+  if (array.length > 5) {
+    return 'invalid count tags';
+  }
+  return '';
+};
+
+hashtagsInputElement.addEventListener('input', function (evt) {
+  var target = evt.target;
+  if (checkValueInputHashTags(target.value) === 'invalid first letter') {
+    target.setCustomValidity(
+        'Хэш-тег должен начинаться со знака # и отделяться пробелом'
+    );
+  } else if (checkValueInputHashTags(target.value) === 'tag langth too long') {
+    target.setCustomValidity(
+        'Хэш-тег не должен превышать 20 символов'
+    );
+  } else if (checkValueInputHashTags(target.value) === 'tag langth too small') {
+    target.setCustomValidity(
+        'Хэш-тег не быть меньше 2 символов'
+    );
+  } else if (checkValueInputHashTags(target.value) === 'invalid similar tags') {
+    target.setCustomValidity(
+        'Нельзя использовать один и тотже хэш-тег дважды'
+    );
+  } else if (checkValueInputHashTags(target.value) === 'invalid count tags') {
+    target.setCustomValidity(
+        'Нельзя указывать больше 5 хэш-тегов'
+    );
+  } else {
+    target.setCustomValidity('');
+  }
+});
