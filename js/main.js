@@ -9,6 +9,9 @@ var MESSAGE_TEXTS = ['Всё отлично!',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 var ESC_KEY = 'Escape';
+var MIN_SCALE_VALUE = 25;
+var MAX_SCALE_VALUE = 100;
+var CHANGE_SCALE_STEP = 25;
 
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
@@ -221,4 +224,94 @@ hashtagsInputElement.addEventListener('input', function (evt) {
   } else {
     target.setCustomValidity('');
   }
+});
+
+// Работа с эффектами
+
+var scaleControlSmaller = imgUploadContainer.querySelector('.scale__control--smaller');
+var scaleControlBigger = imgUploadContainer.querySelector('.scale__control--bigger');
+var scaleControlValue = imgUploadContainer.querySelector('.scale__control--value');
+var uploadImagePreview = imgUploadContainer.querySelector('.img-upload__preview img');
+
+
+var getScaleValue = function () {
+  return parseInt(scaleControlValue.value, 10);
+};
+
+var setScaleValue = function (value) {
+  if (value >= MIN_SCALE_VALUE && value <= MAX_SCALE_VALUE) {
+    scaleControlValue.value = value + '%';
+
+    uploadImagePreview.style.transform = 'scale(' + value / 100 + ')';
+  }
+};
+
+var onScaleControlclick = function (evt) {
+  if (evt.target === scaleControlSmaller) {
+    setScaleValue(getScaleValue() - CHANGE_SCALE_STEP);
+  } else if (evt.target === scaleControlBigger) {
+    setScaleValue(getScaleValue() + CHANGE_SCALE_STEP);
+  }
+};
+
+scaleControlValue.value = '100%';
+
+scaleControlSmaller.addEventListener('click', onScaleControlclick);
+scaleControlBigger.addEventListener('click', onScaleControlclick);
+
+var effectLevelPin = imgUploadContainer.querySelector('.effect-level__pin');
+effectLevelPin.style.left = '100%';
+var effectLevel = imgUploadContainer.querySelector('.effect-level');
+effectLevel.classList.add('hidden');
+var effectLevelDepth = imgUploadContainer.querySelector('.effect-level__depth');
+var effectLevelValue = imgUploadContainer.querySelector('.effect-level__value');
+var effectsRadioSet = imgUploadContainer.querySelector('.effects');
+
+var clearEffect = function () {
+  uploadImagePreview.removeAttribute('class');
+  effectLevel.classList.add('hidden');
+};
+
+var addEffect = function (evt) {
+  var effectName = evt.target.value;
+  clearEffect();
+
+  if (effectName !== 'none') {
+    uploadImagePreview.classList.add('effects__preview--' + effectName);
+    effectLevel.classList.remove('hidden');
+  }
+  changeEffectLevelDepth();
+};
+
+var getEffectLevelDepth = function () {
+  var levelDepth = parseInt(effectLevelPin.style.left, 10);
+
+  return levelDepth;
+};
+
+var changeEffectLevelDepth = function () {
+  effectLevelDepth.style.width = getEffectLevelDepth() + '%';
+  effectLevelValue.value = getEffectLevelDepth();
+};
+
+var oneffectLevelPinMouseDown = function () {
+
+};
+
+var oneffectLevelPinMouseUp = function () {
+
+};
+
+effectLevelPin.addEventListener('mousedown', oneffectLevelPinMouseDown);
+effectLevelPin.addEventListener('mouseup', oneffectLevelPinMouseUp);
+effectsRadioSet.addEventListener('click', addEffect);
+
+// Работа с полем комментария
+var descriptionTextareaElement = imgUploadContainer.querySelector('.text__description');
+
+descriptionTextareaElement.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onUploadPopupEscPress);
+});
+descriptionTextareaElement.addEventListener('blur', function () {
+  document.addEventListener('keydown', onUploadPopupEscPress);
 });
