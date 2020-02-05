@@ -82,7 +82,6 @@ createPhotosList();
 // ----------------------Module3-task3----------------------------//
 
 var bigPictureContainer = document.querySelector('.big-picture');
-// bigPictureContainer.classList.remove('hidden');
 
 var showBigPicture = function (photo) {
   var bigPictureImgElement = bigPictureContainer.querySelector('.big-picture__img');
@@ -123,7 +122,6 @@ var createCommentsList = function (arrayComments) {
 createCommentsList(photos[0]);
 
 var bodyElement = document.querySelector('body');
-// bodyElement.classList.add('modal-open');
 
 // ------------------------Module4-task2-------------------------------- //
 var imgUploadContainer = document.querySelector('.img-upload');
@@ -176,6 +174,11 @@ var deleteSimilarElements = function (array) {
 
 
 var checkValueInputHashTags = function (inputValue) {
+
+  if (inputValue === '') {
+    return '';
+  }
+
   var array = inputValue.split(' ');
 
   for (var i = 0; i <= array.length - 1; i += 1) {
