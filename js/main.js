@@ -172,6 +172,16 @@ var deleteSimilarElements = function (array) {
   });
 };
 
+var getGoodCountSharps = function (string) {
+  var result = 0;
+  for (var i = 0; i <= string.length - 1; i += 1) {
+    if (string[i] === '#') {
+      result += 1;
+    }
+  }
+  return result === 1;
+};
+
 
 var checkValueInputHashTags = function (inputValue) {
 
@@ -190,6 +200,9 @@ var checkValueInputHashTags = function (inputValue) {
     }
     if (array[i].length === 1) {
       return 'tag langth too small';
+    }
+    if (getGoodCountSharps(array[i]) === false) {
+      return 'too much sharps in tag';
     }
   }
 
@@ -223,6 +236,10 @@ hashtagsInputElement.addEventListener('input', function (evt) {
   } else if (checkValueInputHashTags(target.value) === 'invalid count tags') {
     target.setCustomValidity(
         'Нельзя указывать больше 5 хэш-тегов'
+    );
+  } else if (checkValueInputHashTags(target.value) === 'too much sharps in tag') {
+    target.setCustomValidity(
+        'Нельзя использовать знак # в теле хэш-тега'
     );
   } else {
     target.setCustomValidity('');
