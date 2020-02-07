@@ -191,7 +191,7 @@ var checkValueInputHashTags = function (inputValue) {
 
   var array = inputValue.split(' ');
 
-  for (var i = 0; i <= array.length - 1; i += 1) {
+  for (var i = 0; i < array.length; i += 1) {
     if (array[i][0] !== '#') {
       return 'invalid first letter';
     }
@@ -201,7 +201,7 @@ var checkValueInputHashTags = function (inputValue) {
     if (array[i].length === 1) {
       return 'tag langth too small';
     }
-    if (getGoodCountSharps(array[i]) === false) {
+    if (!getGoodCountSharps(array[i])) {
       return 'too much sharps in tag';
     }
   }
