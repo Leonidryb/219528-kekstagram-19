@@ -134,16 +134,13 @@ var onBigPictureEscPress = function (evt) {
 };
 
 var clearCommentList = function () {
-  for (var i = 0; i < commentsList.querySelectorAll('li').length; i += 1) {
-    commentsList.querySelectorAll('li')[i].remove();
-  }
+  commentsList.innerHTML = '';
 };
 
 var openBigPicture = function (index) {
   bigPictureContainer.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
   document.addEventListener('keydown', onBigPictureEscPress);
-  clearCommentList();
   showBigPicture(photos[index]);
   createCommentsList(photos[index]);
 };
