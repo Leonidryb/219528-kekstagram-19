@@ -95,7 +95,7 @@ var showBigPicture = function (photo) {
   bigPictureSocialElement.querySelector('.comments-loader').classList.add('hidden');
 };
 
-showBigPicture(photos[0]);
+// showBigPicture(photos[0]);
 
 var commentsList = bigPictureContainer.querySelector('.social__comments');
 
@@ -119,9 +119,55 @@ var createCommentsList = function (arrayComments) {
   commentsList.appendChild(fragment);
 };
 
-createCommentsList(photos[0]);
+// createCommentsList(photos[0]);
 
 var bodyElement = document.querySelector('body');
+
+// ------------------------------module4-task3 ----------------------//
+var allRefersPictureSmallElement = picturesContainer.querySelectorAll('.picture');
+var bigPictureCloseElement = bigPictureContainer.querySelector('.big-picture__cancel');
+
+var onBigPictureEscPress = function (evt) {
+  if (evt.key === ESC_KEY) {
+    closeBigPicture();
+  }
+};
+
+var clearCommentList = function () {
+  commentsList.innerHTML = '';
+};
+
+var openBigPicture = function (index) {
+  bigPictureContainer.classList.remove('hidden');
+  bodyElement.classList.add('modal-open');
+  document.addEventListener('keydown', onBigPictureEscPress);
+  showBigPicture(photos[index]);
+  createCommentsList(photos[index]);
+};
+
+var closeBigPicture = function () {
+  bigPictureContainer.classList.add('hidden');
+  bodyElement.classList.remove('modal-open');
+  document.removeEventListener('keydown', onBigPictureEscPress);
+  clearCommentList();
+};
+
+var addClickListener = function (photo, index) {
+  photo.addEventListener('click', function () {
+    openBigPicture(index);
+  });
+};
+
+var addListenerForAllsmallPictures = function () {
+  for (var i = 0; i < allRefersPictureSmallElement.length; i += 1) {
+    var photo = allRefersPictureSmallElement[i];
+    addClickListener(photo, i);
+  }
+};
+
+addListenerForAllsmallPictures();
+
+bigPictureCloseElement.addEventListener('click', closeBigPicture);
 
 // ------------------------Module4-task2-------------------------------- //
 var imgUploadContainer = document.querySelector('.img-upload');
