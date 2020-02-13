@@ -203,6 +203,7 @@
   effectsRadioSet.addEventListener('click', addEffect);
 
   var maxWidthEffect = 448;
+  var minWidthEffect = 0;
 
   effectLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -224,6 +225,13 @@
 
       effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift.x) + 'px';
       effectLevelDepth.style.width = (effectLevelPin.offsetLeft - shift.x) + 'px';
+
+      if (parseInt(effectLevelPin.style.left, 10) < minWidthEffect) {
+        effectLevelPin.style.left = minWidthEffect + 'px';
+      }
+      if (parseInt(effectLevelPin.style.left, 10) >= maxWidthEffect) {
+        effectLevelPin.style.left = maxWidthEffect + 'px';
+      }
 
       if (uploadImagePreview.classList.contains('effects__preview--chrome')) {
         var filterEffectLevel = Math.trunc(((parseInt(effectLevelPin.style.left, 10)) / maxWidthEffect) * 10) / 10;
