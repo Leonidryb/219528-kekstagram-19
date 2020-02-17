@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.preview = (function () {
   var bigPictureContainer = document.querySelector('.big-picture');
 
   var showBigPicture = function (photo) {
@@ -42,8 +42,6 @@
   var bodyElement = document.querySelector('body');
 
   var picturesContainer = document.querySelector('.pictures');
-
-  var allRefersPictureSmallElement = picturesContainer.querySelectorAll('.picture');
   var bigPictureCloseElement = bigPictureContainer.querySelector('.big-picture__cancel');
 
   var onBigPictureEscPress = function (evt) {
@@ -54,11 +52,17 @@
     commentsList.innerHTML = '';
   };
 
+  var getPhoto = function (photos) {
+    return photos[0].url;
+  };
+
+  console.log(window.backend.load(getPhoto));
+
   var openBigPicture = function (index) {
     bigPictureContainer.classList.remove('hidden');
     bodyElement.classList.add('modal-open');
     document.addEventListener('keydown', onBigPictureEscPress);
-    showBigPicture(window.data.photos[index]);
+    showBigPicture(window.backend.load(getPhoto, index));
     createCommentsList(window.data.photos[index]);
   };
 
@@ -76,14 +80,20 @@
   };
 
   var addListenerForAllsmallPictures = function () {
+    var allRefersPictureSmallElement = picturesContainer.querySelectorAll('.picture');
+
     for (var i = 0; i < allRefersPictureSmallElement.length; i += 1) {
       var photo = allRefersPictureSmallElement[i];
       addClickListener(photo, i);
     }
   };
 
-  addListenerForAllsmallPictures();
+  // addListenerForAllsmallPictures();
 
   bigPictureCloseElement.addEventListener('click', closeBigPicture);
+
+  return {
+    addListenerForAllsmallPictures: addListenerForAllsmallPictures
+  };
 
 })();
