@@ -52,18 +52,12 @@ window.preview = (function () {
     commentsList.innerHTML = '';
   };
 
-  var getPhoto = function (photos) {
-    return photos[0].url;
-  };
-
-  console.log(window.backend.load(getPhoto));
-
   var openBigPicture = function (index) {
     bigPictureContainer.classList.remove('hidden');
     bodyElement.classList.add('modal-open');
     document.addEventListener('keydown', onBigPictureEscPress);
-    showBigPicture(window.backend.load(getPhoto, index));
-    createCommentsList(window.data.photos[index]);
+    showBigPicture(window.backend.dataPictures[index]);
+    createCommentsList(window.backend.dataPictures[index]);
   };
 
   var closeBigPicture = function () {
@@ -87,8 +81,6 @@ window.preview = (function () {
       addClickListener(photo, i);
     }
   };
-
-  // addListenerForAllsmallPictures();
 
   bigPictureCloseElement.addEventListener('click', closeBigPicture);
 

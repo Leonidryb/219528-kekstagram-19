@@ -14,6 +14,8 @@ window.backend = (function () {
   };
   var TIMEOUT_IN_MS = 10000; // 10 s;
 
+  var dataPictures = [];
+
   var load = function (onLoad) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -21,16 +23,14 @@ window.backend = (function () {
     xhr.addEventListener('load', function () {
       if (xhr.status === statusCode.OK) {
         onLoad(xhr.response);
-        window.preview.addListenerForAllsmallPictures();
+      } else {
+        throw new Error('Произошла ошибка: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
-    // xhr.addEventListener('error', function () {
-    //   onError('Произошла ошибка соединения');
-    // });
-    // xhr.addEventListener('timeout', function () {
-    //   onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
-    // });
+    xhr.addEventListener('timeout', function () {
+      throw new Error('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+    });
 
     xhr.timeout = TIMEOUT_IN_MS;
 
@@ -39,6 +39,7 @@ window.backend = (function () {
   };
 
   return {
-    load: load
+    load: load,
+    dataPictures: dataPictures
   };
 })();

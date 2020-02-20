@@ -24,6 +24,10 @@
     picturesContainer.appendChild(fragment);
   };
 
-  window.backend.load(createPhotosList);
+  window.backend.load(function (data) {
+    window.backend.dataPictures = data;
+    createPhotosList(window.backend.dataPictures);
+    window.preview.addListenerForAllsmallPictures();
+  });
 
 })();
