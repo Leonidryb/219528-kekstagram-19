@@ -28,6 +28,10 @@ window.backend = (function () {
       }
     });
 
+    xhr.addEventListener('error', function () {
+      throw new Error('Произошла ошибка соединения');
+    });
+
     xhr.addEventListener('timeout', function () {
       throw new Error('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
