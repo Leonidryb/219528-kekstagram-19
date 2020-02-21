@@ -208,23 +208,17 @@
   effectLevelPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
-    var startCoords = {
-      x: evt.clientX,
-    };
+    var startCoords = evt.clientX;
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX
-      };
+      var shift = startCoords - moveEvt.clientX;
 
-      startCoords = {
-        x: moveEvt.clientX
-      };
+      startCoords = moveEvt.clientX;
 
-      effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift.x) + 'px';
-      effectLevelDepth.style.width = (effectLevelPin.offsetLeft - shift.x) + 'px';
+      effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift) + 'px';
+      effectLevelDepth.style.width = (effectLevelPin.offsetLeft - shift) + 'px';
 
       if (parseInt(effectLevelPin.style.left, 10) < minWidthEffect) {
         effectLevelPin.style.left = minWidthEffect + 'px';

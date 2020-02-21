@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.preview = (function () {
   var bigPictureContainer = document.querySelector('.big-picture');
 
   var showBigPicture = function (photo) {
@@ -42,8 +42,6 @@
   var bodyElement = document.querySelector('body');
 
   var picturesContainer = document.querySelector('.pictures');
-
-  var allRefersPictureSmallElement = picturesContainer.querySelectorAll('.picture');
   var bigPictureCloseElement = bigPictureContainer.querySelector('.big-picture__cancel');
 
   var onBigPictureEscPress = function (evt) {
@@ -58,8 +56,8 @@
     bigPictureContainer.classList.remove('hidden');
     bodyElement.classList.add('modal-open');
     document.addEventListener('keydown', onBigPictureEscPress);
-    showBigPicture(window.data.photos[index]);
-    createCommentsList(window.data.photos[index]);
+    showBigPicture(window.backend.dataPictures[index]);
+    createCommentsList(window.backend.dataPictures[index]);
   };
 
   var closeBigPicture = function () {
@@ -76,14 +74,18 @@
   };
 
   var addListenerForAllsmallPictures = function () {
+    var allRefersPictureSmallElement = picturesContainer.querySelectorAll('.picture');
+
     for (var i = 0; i < allRefersPictureSmallElement.length; i += 1) {
       var photo = allRefersPictureSmallElement[i];
       addClickListener(photo, i);
     }
   };
 
-  addListenerForAllsmallPictures();
-
   bigPictureCloseElement.addEventListener('click', closeBigPicture);
+
+  return {
+    addListenerForAllsmallPictures: addListenerForAllsmallPictures
+  };
 
 })();

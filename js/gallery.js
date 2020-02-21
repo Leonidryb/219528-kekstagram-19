@@ -16,14 +16,18 @@
     return pictureElement;
   };
 
-  var createPhotosList = function () {
+  var createPhotosList = function (photos) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.photos.length; i++) {
-      fragment.appendChild(renderPicture(window.data.photos[i]));
+    for (var i = 0; i < photos.length; i++) {
+      fragment.appendChild(renderPicture(photos[i]));
     }
     picturesContainer.appendChild(fragment);
   };
 
-  createPhotosList();
+  window.backend.load(function (data) {
+    window.backend.dataPictures = data;
+    createPhotosList(window.backend.dataPictures);
+    window.preview.addListenerForAllsmallPictures();
+  });
 
 })();
