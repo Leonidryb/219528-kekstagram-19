@@ -2,6 +2,7 @@
 
 window.backend = (function () {
   var LOAD_URL = 'https://js.dump.academy/kekstagram/data';
+  var SAVE_URL = 'https://js.dump.academy/kekstagram';
   var statusCode = {
     OK: 200,
     BAD_REQUEST: 400,
@@ -42,8 +43,34 @@ window.backend = (function () {
     xhr.send();
   };
 
+  var save = function (data, onLoad, onError) {
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
+
+    xhr.addEventListener('load', function () {
+      if (xhr.status === statusCode.OK) {
+        onLoad(xhr.response);
+      } else {
+        onError();
+      }
+    });
+
+    xhr.addEventListener('error', function () {
+      onError();
+    });
+    xhr.addEventListener('timeout', function () {
+      onError();
+    });
+
+    xhr.timeout = TIMEOUT_IN_MS;
+
+    xhr.open('POST', SAVE_URL);
+    xhr.send(data);
+  };
+
   return {
     load: load,
+    save: save,
     dataPictures: dataPictures
   };
 })();

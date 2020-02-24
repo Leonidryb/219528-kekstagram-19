@@ -7,7 +7,9 @@
   var CHANGE_SCALE_STEP = 25;
 
   var bodyElement = document.querySelector('body');
+  var mainElement = bodyElement.querySelector('main');
   var imgUploadContainer = document.querySelector('.img-upload');
+  var imgUploadFormElement = imgUploadContainer.querySelector('#upload-select-image');
   var imgUploadPopupElement = imgUploadContainer.querySelector('.img-upload__overlay');
   var imgUploadPopupCloseElement = imgUploadContainer.querySelector('.img-upload__cancel');
   var imgUploadInputElement = imgUploadContainer.querySelector('#upload-file');
@@ -21,12 +23,16 @@
     bodyElement.classList.add('modal-open');
     document.addEventListener('keydown', onUploadPopupEscPress);
     scaleControlValue.value = '100%';
+    noneEffectInpitElement.focus();
   };
 
   var closeUploadPopup = function () {
     imgUploadPopupElement.classList.add('hidden');
     bodyElement.classList.remove('modal-open');
     imgUploadInputElement.value = '';
+    hashtagsInputElement.value = '';
+    descriptionTextareaElement.value = '';
+    clearEffect();
     document.removeEventListener('keydown', onUploadPopupEscPress);
     uploadImagePreview.style.transform = 'scale(1)';
   };
@@ -134,6 +140,7 @@
   var scaleControlBigger = imgUploadContainer.querySelector('.scale__control--bigger');
   var scaleControlValue = imgUploadContainer.querySelector('.scale__control--value');
   var uploadImagePreview = imgUploadContainer.querySelector('.img-upload__preview img');
+  var noneEffectInpitElement = imgUploadContainer.querySelector('#effect-none');
 
 
   var getScaleValue = function () {
@@ -275,5 +282,62 @@
   descriptionTextareaElement.addEventListener('blur', function () {
     document.addEventListener('keydown', onUploadPopupEscPress);
   });
+
+  // Отправка данных на сервер
+
+  var onSubmitForm = function (evt) {
+    window.backend.save(new FormData(imgUploadFormElement), onSuccessSaveForm, onErrorSaveForm);
+    evt.preventDefault();
+  };
+
+  imgUploadFormElement.addEventListener('submit', onSubmitForm);
+
+
+  // Показываем сообщение об успешной загрузке
+
+  var succesMessageTemplate = document.querySelector('#success').content.querySelector('.success');
+  var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
+
+  var onSuccessMessageEscPress = function (evt) {
+    window.util.isEscEvent(evt, closeSuccessMessage);
+  };
+
+  var onSuccessSaveForm = function () {
+    closeUploadPopup();
+    var successMessageElement = succesMessageTemplate.cloneNode(true);
+    mainElement.appendChild(successMessageElement);
+    bodyElement.classList.add('modal-open');
+    document.addEventListener('click', closeSuccessMessage);
+    document.addEventListener('keydown', onSuccessMessageEscPress);
+    mainElement.querySelector('.success').querySelector('.success__button').addEventListener('click', closeSuccessMessage);
+  };
+
+  var closeSuccessMessage = function () {
+    mainElement.querySelector('.success').remove();
+    document.removeEventListener('click', closeSuccessMessage);
+    document.removeEventListener('keydown', onSuccessMessageEscPress);
+    bodyElement.classList.remove('modal-open');
+  };
+
+  var onErrorSaveForm = function () {
+    closeUploadPopup();
+    var errorMessageElement = errorMessageTemplate.cloneNode(true);
+    mainElement.appendChild(errorMessageElement);
+    bodyElement.classList.add('modal-open');
+    document.addEventListener('click', closeErrorMessage);
+    document.addEventListener('keydown', onErrorMessageEscPress);
+    mainElement.querySelector('.error').querySelector('.error__button').addEventListener('click', closeErrorMessage);
+  };
+
+  var onErrorMessageEscPress = function (evt) {
+    window.util.isEscEvent(evt, closeErrorMessage);
+  };
+
+  var closeErrorMessage = function () {
+    mainElement.querySelector('.error').remove();
+    document.removeEventListener('click', closeErrorMessage);
+    document.removeEventListener('keydown', onErrorMessageEscPress);
+    bodyElement.classList.remove('modal-open');
+  };
 
 })();
