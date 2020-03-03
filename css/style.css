@@ -180,6 +180,10 @@ main {
   border-radius: 2px;
 }
 
+.img-filters__button:focus {
+  outline: 2px solid #eed21e;
+}
+
 .img-filters__label {
   padding: 5px 15px;
 
