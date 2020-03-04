@@ -61,10 +61,15 @@ window.filter = (function () {
     filterRandomButton.classList.remove('img-filters__button--active');
   };
 
-  filterDefaultButton.addEventListener('click', filterDefault);
-  filterRandomButton.addEventListener('click', filterRandom);
-  filterDiscussedButton.addEventListener('click', filterDiscussed);
-
+  filterDefaultButton.addEventListener('click', function () {
+    window.debounce(filterDefault);
+  });
+  filterRandomButton.addEventListener('click', function () {
+    window.debounce(filterRandom);
+  });
+  filterDiscussedButton.addEventListener('click', function () {
+    window.debounce(filterDiscussed);
+  });
   return {
     show: showFiltersContainer
   };
