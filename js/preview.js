@@ -1,7 +1,11 @@
 'use strict';
 
 window.preview = (function () {
+  var COUNT_COMMENTS_PER_CLICK = 5;
+
   var bigPictureContainer = document.querySelector('.big-picture');
+  var commentsLoader = bigPictureContainer.querySelector('.comments-loader');
+  var showedCommentsCountElement = bigPictureContainer.querySelector('.social__comment-showed');
 
   var showBigPicture = function (photo) {
     var bigPictureImgElement = bigPictureContainer.querySelector('.big-picture__img');
@@ -11,8 +15,6 @@ window.preview = (function () {
     bigPictureSocialElement.querySelector('.likes-count').textContent = photo.likes + '';
     bigPictureSocialElement.querySelector('.comments-count').textContent = photo.comments.length + '';
     bigPictureSocialElement.querySelector('.social__caption').textContent = photo.description;
-    bigPictureSocialElement.querySelector('.social__comment-count').classList.add('hidden');
-    bigPictureSocialElement.querySelector('.comments-loader').classList.add('hidden');
   };
 
 
@@ -26,18 +28,47 @@ window.preview = (function () {
     commentElement.querySelector('.social__picture').src = comment.avatar;
     commentElement.querySelector('.social__picture').alt = comment.name;
     commentElement.querySelector('.social__text').textContent = comment.message;
+    // commentElement.style.display = 'none';
 
     return commentElement;
   };
 
-  var createCommentsList = function (arrayComments) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < arrayComments.comments.length; i++) {
-      fragment.appendChild(renderComment(arrayComments.comments[i]));
+  var clearCommentList = function () {
+    commentsList.innerHTML = '';
+  };
+
+  var commentsAlreadyShown = 0;
+
+  var loadComments = function (comments) {
+    var total = comments.length;
+    var limit = Math.min(commentsAlreadyShown + COUNT_COMMENTS_PER_CLICK, total);
+
+    for (var i = commentsAlreadyShown; i < limit; i += 1) {
+      comments[i].style.display = 'flex';
     }
+
+    commentsAlreadyShown = limit;
+
+    if (commentsAlreadyShown === total) {
+      commentsLoader.classList.add('hidden');
+    }
+
+    showedCommentsCountElement.textContent = limit;
+  };
+
+  var createCommentsList = function (comments) {
+    var fragment = document.createDocumentFragment();
+    comments.forEach(function (comment) {
+      fragment.appendChild(renderComment(comment));
+    });
     commentsList.appendChild(fragment);
   };
 
+  var resetComments = function () {
+    commentsAlreadyShown = 0;
+    clearCommentList();
+    commentsLoader.classList.remove('hidden');
+  };
 
   var bodyElement = document.querySelector('body');
 
@@ -48,16 +79,12 @@ window.preview = (function () {
     window.util.isEscEvent(evt, closeBigPicture);
   };
 
-  var clearCommentList = function () {
-    commentsList.innerHTML = '';
-  };
-
-  var openBigPicture = function (index) {
+  var openBigPicture = function (picture) {
     bigPictureContainer.classList.remove('hidden');
     bodyElement.classList.add('modal-open');
     document.addEventListener('keydown', onBigPictureEscPress);
-    showBigPicture(window.backend.dataPictures[index]);
-    createCommentsList(window.backend.dataPictures[index]);
+    showBigPicture(picture);
+    createCommentsList(picture.comments);
   };
 
   var closeBigPicture = function () {
@@ -67,9 +94,17 @@ window.preview = (function () {
     clearCommentList();
   };
 
-  var addClickListener = function (photo, index) {
-    photo.addEventListener('click', function () {
-      openBigPicture(index);
+  var addClickListener = function (photo) {
+    photo.addEventListener('click', function (evt) {
+      var photoSrc = evt.target.getAttribute('src');
+      var picture;
+
+      window.backend.dataPictures.forEach(function (it) {
+        if (it.url === photoSrc) {
+          picture = Object.create(it);
+        }
+      });
+      openBigPicture(picture);
     });
   };
 
@@ -78,7 +113,8 @@ window.preview = (function () {
 
     for (var i = 0; i < allRefersPictureSmallElement.length; i += 1) {
       var photo = allRefersPictureSmallElement[i];
-      addClickListener(photo, i);
+
+      addClickListener(photo);
     }
   };
 
