@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+window.gallery = (function () {
 
   var picturesContainer = document.querySelector('.pictures');
 
@@ -28,6 +28,11 @@
     window.backend.dataPictures = data;
     createPhotosList(window.backend.dataPictures);
     window.preview.addListenerForAllsmallPictures();
+    window.filter.show();
   });
+
+  return {
+    createPhotosList: createPhotosList
+  };
 
 })();
