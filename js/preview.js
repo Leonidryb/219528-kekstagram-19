@@ -28,7 +28,7 @@ window.preview = (function () {
     commentElement.querySelector('.social__picture').src = comment.avatar;
     commentElement.querySelector('.social__picture').alt = comment.name;
     commentElement.querySelector('.social__text').textContent = comment.message;
-    // commentElement.style.display = 'none';
+    commentElement.style.display = 'none';
 
     return commentElement;
   };
@@ -85,13 +85,18 @@ window.preview = (function () {
     document.addEventListener('keydown', onBigPictureEscPress);
     showBigPicture(picture);
     createCommentsList(picture.comments);
+    loadComments(commentsList.querySelectorAll('.social__comment'));
   };
+
+  commentsLoader.addEventListener('click', function () {
+    loadComments(commentsList.querySelectorAll('.social__comment'));
+  });
 
   var closeBigPicture = function () {
     bigPictureContainer.classList.add('hidden');
     bodyElement.classList.remove('modal-open');
     document.removeEventListener('keydown', onBigPictureEscPress);
-    clearCommentList();
+    resetComments();
   };
 
   var addClickListener = function (photo) {
