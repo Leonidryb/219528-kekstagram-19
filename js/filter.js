@@ -18,6 +18,7 @@ window.filter = (function () {
     });
     window.gallery.createPhotosList(window.backend.dataPictures);
     window.preview.addListenerForAllsmallPictures();
+
     filterDefaultButton.classList.add('img-filters__button--active');
     filterRandomButton.classList.remove('img-filters__button--active');
     filterDiscussedButton.classList.remove('img-filters__button--active');
