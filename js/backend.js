@@ -3,6 +3,7 @@
 window.backend = (function () {
   var LOAD_URL = 'https://js.dump.academy/kekstagram/data';
   var SAVE_URL = 'https://js.dump.academy/kekstagram';
+  var TIMEOUT_IN_MS = 10000;
   var statusCode = {
     OK: 200,
     BAD_REQUEST: 400,
@@ -13,7 +14,6 @@ window.backend = (function () {
     SERVER_UNAVAILABLE: 503,
     SERVER_OFF: 521
   };
-  var TIMEOUT_IN_MS = 10000; // 10 s;
 
   var dataPictures = [];
 

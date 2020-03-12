@@ -6,6 +6,9 @@
   var MAX_SCALE_VALUE = 100;
   var CHANGE_SCALE_STEP = 25;
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var HASHTAG_MAX_LENGHT = 19;
+  var HASHTAG_MIN_LENGHT = 1;
+  var MAX_COUNT_HASHTAGS = 5;
 
   var bodyElement = document.querySelector('body');
   var mainElement = bodyElement.querySelector('main');
@@ -60,7 +63,6 @@
   imgUploadInputElement.addEventListener('change', openUploadPopup);
   imgUploadPopupCloseElement.addEventListener('click', closeUploadPopup);
 
-  // Валидация хеш-тегов
   var hashtagsInputElement = imgUploadContainer.querySelector('.text__hashtags');
 
   hashtagsInputElement.addEventListener('focus', function () {
@@ -104,10 +106,10 @@
       if (array[i][0] !== '#') {
         return 'invalid first letter';
       }
-      if (array[i].length > 19) {
+      if (array[i].length > HASHTAG_MAX_LENGHT) {
         return 'tag langth too long';
       }
-      if (array[i].length === 1) {
+      if (array[i].length === HASHTAG_MIN_LENGHT) {
         return 'tag langth too small';
       }
       if (!getGoodCountSharps(array[i])) {
@@ -118,7 +120,7 @@
     if (array.length !== deleteSimilarElements(array).length) {
       return 'invalid similar tags';
     }
-    if (array.length > 5) {
+    if (array.length > MAX_COUNT_HASHTAGS) {
       return 'invalid count tags';
     }
     return '';
@@ -155,7 +157,6 @@
     }
   });
 
-  // Работа с эффектами
   var scaleControlSmaller = imgUploadContainer.querySelector('.scale__control--smaller');
   var scaleControlBigger = imgUploadContainer.querySelector('.scale__control--bigger');
   var scaleControlValue = imgUploadContainer.querySelector('.scale__control--value');
@@ -293,7 +294,6 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  // Работа с полем комментария
   var descriptionTextareaElement = imgUploadContainer.querySelector('.text__description');
 
   descriptionTextareaElement.addEventListener('focus', function () {
@@ -303,17 +303,12 @@
     document.addEventListener('keydown', onUploadPopupEscPress);
   });
 
-  // Отправка данных на сервер
-
   var onSubmitForm = function (evt) {
     window.backend.save(new FormData(imgUploadFormElement), onSuccessSaveForm, onErrorSaveForm);
     evt.preventDefault();
   };
 
   imgUploadFormElement.addEventListener('submit', onSubmitForm);
-
-
-  // Показываем сообщение об успешной загрузке
 
   var succesMessageTemplate = document.querySelector('#success').content.querySelector('.success');
   var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');

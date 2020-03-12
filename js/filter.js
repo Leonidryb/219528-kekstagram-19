@@ -1,12 +1,12 @@
 'use strict';
 
 window.filter = (function () {
+  var COUNT_RANDOM_PICTURES = 10;
   var picturesContainer = document.querySelector('.pictures');
   var filtersContainerElement = document.querySelector('.img-filters');
   var filterDefaultButton = filtersContainerElement.querySelector('#filter-default');
   var filterRandomButton = filtersContainerElement.querySelector('#filter-random');
   var filterDiscussedButton = filtersContainerElement.querySelector('#filter-discussed');
-  var COUNT_RANDOM_PICTURES = 10;
 
   var showFiltersContainer = function () {
     filtersContainerElement.classList.remove('img-filters--inactive');
