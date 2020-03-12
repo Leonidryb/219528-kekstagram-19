@@ -5,6 +5,7 @@
   var MIN_SCALE_VALUE = 25;
   var MAX_SCALE_VALUE = 100;
   var CHANGE_SCALE_STEP = 25;
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   var bodyElement = document.querySelector('body');
   var mainElement = bodyElement.querySelector('main');
@@ -24,6 +25,7 @@
     document.addEventListener('keydown', onUploadPopupEscPress);
     scaleControlValue.value = '100%';
     noneEffectInpitElement.focus();
+    changePreviewImage();
   };
 
   var closeUploadPopup = function () {
@@ -35,6 +37,24 @@
     clearEffect();
     document.removeEventListener('keydown', onUploadPopupEscPress);
     uploadImagePreview.style.transform = 'scale(1)';
+  };
+
+  var changePreviewImage = function () {
+    var file = imgUploadInputElement.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        uploadImagePreview.src = reader.result;
+      });
+      reader.readAsDataURL(file);
+    }
   };
 
   imgUploadInputElement.addEventListener('change', openUploadPopup);
