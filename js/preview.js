@@ -101,15 +101,19 @@ window.preview = (function () {
 
   var addClickListener = function (photo) {
     photo.addEventListener('click', function (evt) {
-      var photoSrc = evt.target.getAttribute('src');
-      var picture;
+
+      var photoSrc;
+      if (evt.target.tagName === 'IMG') {
+        photoSrc = evt.target.src;
+      } else {
+        photoSrc = evt.target.firstElementChild.src;
+      }
 
       window.backend.dataPictures.forEach(function (it) {
-        if (it.url === photoSrc) {
-          picture = Object.create(it);
+        if (photoSrc.indexOf(it.url) > 0) {
+          openBigPicture(it);
         }
       });
-      openBigPicture(picture);
     });
   };
 

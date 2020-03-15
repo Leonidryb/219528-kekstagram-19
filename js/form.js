@@ -100,7 +100,9 @@
       return '';
     }
 
-    var array = inputValue.split(' ');
+    var array = inputValue.split(' ').filter(function (tag) {
+      return tag !== '';
+    });
 
     for (var i = 0; i < array.length; i += 1) {
       if (array[i][0] !== '#') {
@@ -114,6 +116,9 @@
       }
       if (!getGoodCountSharps(array[i])) {
         return 'too much sharps in tag';
+      }
+      if (!array[i].match(/^#[0-9a-zа-я]+$/)) {
+        return 'invalid tag';
       }
     }
 
@@ -151,6 +156,10 @@
     } else if (checkValueInputHashTags(target.value) === 'too much sharps in tag') {
       target.setCustomValidity(
           'Нельзя использовать знак # в теле хэш-тега'
+      );
+    } else if (checkValueInputHashTags(target.value) === 'invalid tag') {
+      target.setCustomValidity(
+          'Хэш-тег может содержать только буквы и цифры'
       );
     } else {
       target.setCustomValidity('');
