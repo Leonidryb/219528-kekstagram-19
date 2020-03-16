@@ -17,7 +17,7 @@ window.backend = (function () {
 
   var dataPictures = [];
 
-  var load = function (onLoad) {
+  var load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -25,16 +25,16 @@ window.backend = (function () {
       if (xhr.status === statusCode.OK) {
         onLoad(xhr.response);
       } else {
-        throw new Error('Произошла ошибка: ' + xhr.status + ' ' + xhr.statusText);
+        onError();
       }
     });
 
     xhr.addEventListener('error', function () {
-      throw new Error('Произошла ошибка соединения');
+      onError();
     });
 
     xhr.addEventListener('timeout', function () {
-      throw new Error('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      onError();
     });
 
     xhr.timeout = TIMEOUT_IN_MS;

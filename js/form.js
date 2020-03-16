@@ -19,10 +19,10 @@
   var imgUploadInputElement = imgUploadContainer.querySelector('#upload-file');
 
   var onUploadPopupEscPress = function (evt) {
-    window.util.isEscEvent(evt, closeUploadPopup);
+    window.util.isEscEvent(evt, onCloseUploadPopup);
   };
 
-  var openUploadPopup = function () {
+  var onOpenUploadPopup = function () {
     imgUploadPopupElement.classList.remove('hidden');
     bodyElement.classList.add('modal-open');
     document.addEventListener('keydown', onUploadPopupEscPress);
@@ -31,7 +31,7 @@
     changePreviewImage();
   };
 
-  var closeUploadPopup = function () {
+  var onCloseUploadPopup = function () {
     imgUploadPopupElement.classList.add('hidden');
     bodyElement.classList.remove('modal-open');
     imgUploadInputElement.value = '';
@@ -60,8 +60,8 @@
     }
   };
 
-  imgUploadInputElement.addEventListener('change', openUploadPopup);
-  imgUploadPopupCloseElement.addEventListener('click', closeUploadPopup);
+  imgUploadInputElement.addEventListener('change', onOpenUploadPopup);
+  imgUploadPopupCloseElement.addEventListener('click', onCloseUploadPopup);
 
   var hashtagsInputElement = imgUploadContainer.querySelector('.text__hashtags');
 
@@ -215,7 +215,7 @@
     scaleControlValue.value = '100%';
   };
 
-  var addEffect = function (evt) {
+  var onAddEffect = function (evt) {
     var effectName = evt.target.value;
     clearEffect();
 
@@ -237,7 +237,7 @@
     effectLevelValue.value = getEffectLevelDepth();
   };
 
-  effectsRadioSet.addEventListener('click', addEffect);
+  effectsRadioSet.addEventListener('click', onAddEffect);
 
   var maxWidthEffect = 448;
   var minWidthEffect = 0;
@@ -323,43 +323,43 @@
   var errorMessageTemplate = document.querySelector('#error').content.querySelector('.error');
 
   var onSuccessMessageEscPress = function (evt) {
-    window.util.isEscEvent(evt, closeSuccessMessage);
+    window.util.isEscEvent(evt, onCloseSuccessMessage);
   };
 
   var onSuccessSaveForm = function () {
-    closeUploadPopup();
+    onCloseUploadPopup();
     var successMessageElement = succesMessageTemplate.cloneNode(true);
     mainElement.appendChild(successMessageElement);
     bodyElement.classList.add('modal-open');
-    document.addEventListener('click', closeSuccessMessage);
+    document.addEventListener('click', onCloseSuccessMessage);
     document.addEventListener('keydown', onSuccessMessageEscPress);
-    mainElement.querySelector('.success').querySelector('.success__button').addEventListener('click', closeSuccessMessage);
+    mainElement.querySelector('.success').querySelector('.success__button').addEventListener('click', onCloseSuccessMessage);
   };
 
-  var closeSuccessMessage = function () {
+  var onCloseSuccessMessage = function () {
     mainElement.querySelector('.success').remove();
-    document.removeEventListener('click', closeSuccessMessage);
+    document.removeEventListener('click', onCloseSuccessMessage);
     document.removeEventListener('keydown', onSuccessMessageEscPress);
     bodyElement.classList.remove('modal-open');
   };
 
   var onErrorSaveForm = function () {
-    closeUploadPopup();
+    onCloseUploadPopup();
     var errorMessageElement = errorMessageTemplate.cloneNode(true);
     mainElement.appendChild(errorMessageElement);
     bodyElement.classList.add('modal-open');
-    document.addEventListener('click', closeErrorMessage);
+    document.addEventListener('click', onCloseErrorMessage);
     document.addEventListener('keydown', onErrorMessageEscPress);
-    mainElement.querySelector('.error').querySelector('.error__button').addEventListener('click', closeErrorMessage);
+    mainElement.querySelector('.error').querySelector('.error__button').addEventListener('click', onCloseErrorMessage);
   };
 
   var onErrorMessageEscPress = function (evt) {
-    window.util.isEscEvent(evt, closeErrorMessage);
+    window.util.isEscEvent(evt, onCloseErrorMessage);
   };
 
-  var closeErrorMessage = function () {
+  var onCloseErrorMessage = function () {
     mainElement.querySelector('.error').remove();
-    document.removeEventListener('click', closeErrorMessage);
+    document.removeEventListener('click', onCloseErrorMessage);
     document.removeEventListener('keydown', onErrorMessageEscPress);
     bodyElement.classList.remove('modal-open');
   };

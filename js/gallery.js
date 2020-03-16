@@ -2,9 +2,11 @@
 
 window.gallery = (function () {
 
+  var bodyElement = document.querySelector('body');
+  var mainElement = bodyElement.querySelector('main');
   var picturesContainer = document.querySelector('.pictures');
-
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+  var errorMessageTemplate = document.querySelector('#gallery-error').content.querySelector('.error');
 
   var renderPicture = function (picture) {
     var pictureElement = pictureTemplate.cloneNode(true);
@@ -24,12 +26,32 @@ window.gallery = (function () {
     picturesContainer.appendChild(fragment);
   };
 
+  var onErrorMessageEscPress = function (evt) {
+    window.util.isEscEvent(evt, closeErrorMessage);
+  };
+
+  var closeErrorMessage = function () {
+    mainElement.querySelector('.error').remove();
+    document.removeEventListener('click', closeErrorMessage);
+    document.removeEventListener('keydown', onErrorMessageEscPress);
+    bodyElement.classList.remove('modal-open');
+  };
+
+  var onErrorLoadGallery = function () {
+    var errorMessageElement = errorMessageTemplate.cloneNode(true);
+    mainElement.appendChild(errorMessageElement);
+    bodyElement.classList.add('modal-open');
+    document.addEventListener('click', closeErrorMessage);
+    document.addEventListener('keydown', onErrorMessageEscPress);
+    mainElement.querySelector('.error').querySelector('.error__button').addEventListener('click', closeErrorMessage);
+  };
+
   window.backend.load(function (data) {
     window.backend.dataPictures = data;
     createPhotosList(window.backend.dataPictures);
     window.preview.addListenerForAllsmallPictures();
     window.filter.show();
-  });
+  }, onErrorLoadGallery);
 
   return {
     createPhotosList: createPhotosList
