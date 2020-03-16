@@ -27,12 +27,12 @@ window.gallery = (function () {
   };
 
   var onErrorMessageEscPress = function (evt) {
-    window.util.isEscEvent(evt, closeErrorMessage);
+    window.util.isEscEvent(evt, onCloseErrorMessage);
   };
 
-  var closeErrorMessage = function () {
+  var onCloseErrorMessage = function () {
     mainElement.querySelector('.error').remove();
-    document.removeEventListener('click', closeErrorMessage);
+    document.removeEventListener('click', onCloseErrorMessage);
     document.removeEventListener('keydown', onErrorMessageEscPress);
     bodyElement.classList.remove('modal-open');
   };
@@ -41,9 +41,9 @@ window.gallery = (function () {
     var errorMessageElement = errorMessageTemplate.cloneNode(true);
     mainElement.appendChild(errorMessageElement);
     bodyElement.classList.add('modal-open');
-    document.addEventListener('click', closeErrorMessage);
+    document.addEventListener('click', onCloseErrorMessage);
     document.addEventListener('keydown', onErrorMessageEscPress);
-    mainElement.querySelector('.error').querySelector('.error__button').addEventListener('click', closeErrorMessage);
+    mainElement.querySelector('.error').querySelector('.error__button').addEventListener('click', onCloseErrorMessage);
   };
 
   window.backend.load(function (data) {
